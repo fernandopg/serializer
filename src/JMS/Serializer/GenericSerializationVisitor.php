@@ -159,20 +159,49 @@ abstract class GenericSerializationVisitor extends AbstractVisitor
         }
     }
 
+    /*
+     * Fernando (March 17, 2017)
+     * I added this functions because in this version we don't have them and we can't update the jms/serializer because FOSRESTBundle doesn't allow to update...
+     * These functions allow us to change the serializer object in the 'serializer.post_serialize' event.
+     * 
+     */
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
     /**
-     * Allows you to add additional data to the current object/root element.
+     * Checks if some data key exists.
      *
      * @param string $key
-     * @param scalar|array $value This value must either be a regular scalar, or an array.
-     *                            It must not contain any objects anymore.
+     * @return boolean
      */
-    public function addData($key, $value)
+    public function hasData($key)
     {
-        if (isset($this->data[$key])) {
-            throw new InvalidArgumentException(sprintf('There is already data for "%s".', $key));
-        }
-
+        return isset($this->data[$key]);
+    }
+    /**
+     * Allows you to replace existing data on the current object/root element.
+     *
+     * @param string $key
+     * @param integer|float|boolean|string|array|null $value This value must either be a regular scalar, or an array.
+     *                                                       It must not contain any objects anymore.
+     */
+    public function setData($key, $value)
+    {
         $this->data[$key] = $value;
+    }
+
+    public function removeData($key)
+    {
+        unset($this->data[$key]);
+    }
+
+    public function replaceKey($oldKey, $newKey)
+    {
+        $this->setData($newKey, $this->data[$oldKey]);
+        $this->removeData($oldKey);
     }
 
     public function getRoot()
