@@ -158,12 +158,11 @@ abstract class GenericSerializationVisitor extends AbstractVisitor
             $this->data[$k] = $v;
         }
     }
-
+    
     /*
      * Fernando (March 17, 2017)
      * I added this functions because in this version we don't have them and we can't update the jms/serializer because FOSRESTBundle doesn't allow to update...
-     * These functions allow us to change the serializer object in the 'serializer.post_serialize' event.
-     * 
+     * These functions enable us to change the serializer object in post_serialize event
      */
 
     public function getData()
